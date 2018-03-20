@@ -33,12 +33,10 @@ def colorDetect(img,option=0):
     # name = random.randint(0,99)
     img = resize_image(img,900,900)
     hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    cv2.imshow("im",hsv)
-    cv2.waitKey(0)
     #高斯模糊
     img = cv2.GaussianBlur(img,(5,5),0)
-    cv2.imshow("im", img)
-    cv2.waitKey(0)
+    # cv2.imshow("im", img)
+    # cv2.waitKey(0)
     # 设定蓝色的阈值
     if(option == 0):
         lower=np.array([100,50,50])
@@ -50,22 +48,22 @@ def colorDetect(img,option=0):
 
     # 根据阈值构建掩模
     mask=cv2.inRange(hsv,lower,upper)
-    cv2.imshow("im", mask)
-    cv2.waitKey(0)
+    # cv2.imshow("im", mask)
+    # cv2.waitKey(0)
     # 对原图像和掩模进行位运算
     res=cv2.bitwise_and(img,img,mask=mask)
-    cv2.imshow("im", res)
-    cv2.waitKey(0)
+    # cv2.imshow("im", res)
+    # cv2.waitKey(0)
     gray = cv2.cvtColor(res,cv2.COLOR_BGR2GRAY)
     #二值化
     ret,thresh1 = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    cv2.imshow("im", thresh1)
-    cv2.waitKey(0)
+    # cv2.imshow("im", thresh1)
+    # cv2.waitKey(0)
     #闭操作
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(17, 3))
     closed = cv2.morphologyEx(thresh1, cv2.MORPH_CLOSE, kernel)
-    cv2.imshow("im", closed)
-    cv2.waitKey(0)
+    # cv2.imshow("im", closed)
+    # cv2.waitKey(0)
     contours_img, contours, hierarchy = cv2.findContours(closed.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
     imgRs = []
     i = 0
@@ -81,18 +79,18 @@ def colorDetect(img,option=0):
             continue
         rect = cv2.minAreaRect(cnt)
         box = cv2.boxPoints(rect)
-        print(box)
-        print('++++++=')
+        # print(box)
+        # print('++++++=')
         rs = img[y:y+h,x:x+w]
         imgRs.append(rs)
     return imgRs
 
 
-if __name__ == '__main__':
-    imagePath = 'aa.jpg' # 图片路径s
-    img = cv2.imread(imagePath)
-    res = colorDetect(img)
-    for re in res:
-        cv2.imshow('pr.jpg', re)
-        #cv2.imshow("img",img)
-        cv2.waitKey(0)
+# if __name__ == '__main__':
+#     imagePath = 'aa.jpg' # 图片路径s
+#     img = cv2.imread(imagePath)
+#     res = colorDetect(img)
+#     for re in res:
+#         cv2.imshow('pr.jpg', re)
+#         #cv2.imshow("img",img)
+#         cv2.waitKey(0)
